@@ -20,17 +20,25 @@ export async function POST(req: Request) {
     });
 
     const mailOptions = {
-      from: email,
-      to: process.env.MAIL_USER, // Your email
-      subject: `New Contact Form Message from ${name}`,
-      html: `
-        <h2>New Contact Message</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Company:</strong> ${company}</p>
-        <p><strong>Message:</strong> ${message}</p>
-      `,
-    };
+  from: `"${name}" <${email}>`, // sender ka name aur email
+  to: process.env.MAIL_USER,   // tumhari email
+  subject: `📬 New Contact Form Submission from ${name}`,
+  html: `
+  <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    <h2 style="color: #1a73e8;">🚀 New Contact Message Received</h2>
+    <p><strong>Name:</strong> ${name}</p>
+    <p><strong>Email:</strong> ${email}</p>
+    ${company ? `<p><strong>Company:</strong> ${company}</p>` : ""}
+    <p><strong>Message:</strong></p>
+    <p style="padding: 12px; background: #f4f4f4; border-radius: 6px;">${message}</p>
+    <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;" />
+    <p style="font-size: 0.85rem; color: #666;">
+      This email was sent from your website AutomexaSolutions contact form.
+    </p>
+  </div>
+  `,
+};
+
 
     await transporter.sendMail(mailOptions);
 
